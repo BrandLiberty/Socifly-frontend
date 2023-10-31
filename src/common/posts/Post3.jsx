@@ -122,8 +122,10 @@ const Post3 = props => {
           title: 'Share via', // Title of the share dialog
           subject: 'Share Link', // Subject of the share dialog
         };
+        setShouldShowAd(true);
         const ShareResponse = await Share.open(shareOptions);
         console.log(JSON.stringify(ShareResponse));
+        
       } catch (error) {
         console.log('Error => ', error);
       }
@@ -343,7 +345,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#0e531f",
     position: 'absolute',
     bottom: '10%',
-    left: '10%',
+    left: '8%',
     // borderColor:BLACK,
     // borderWidth:getResponsiveValue(4,2),
     transform: [{ rotate: '-5deg' }]

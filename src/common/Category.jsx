@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 import CategoryButtons from '../atoms/CategoryButtons';
@@ -21,18 +21,33 @@ const Category = (props) => {
         navigationPage: '',
         onClose: null
     })
+    
     useEffect(() => {
-        setCategory(localState.category)
-    })
+        setCategory(localState.category);
+    }, [localState.category]);
 
+    const data = [];
+    for (let i = 0; i < category.length; i += 9) {
+        data.push(category.slice(i, i + 9));
+    }
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.container1} >
         {showModal ? <CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} /> : ''}
                 <View style={styles.Container2}>
-                {category.map((el,i)=>{
-                    return (<CategoryButtons text={el.type} key={el._id}/>)
-                })}
+                <FlatList
+                data={data}
+                horizontal
+                pagingEnabled // Scroll by screen width
+                keyExtractor={(item, index) => `page-${index}`}
+                renderItem={({ item }) => (
+                    <View style={styles.page}>
+                        {item.map((el) => (
+                            <CategoryButtons text={el.type} key={el._id} />
+                        ))}
+                    </View>
+                )}
+            />
                 </View>
             </View>
         </SafeAreaView>
@@ -57,6 +72,11 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         maxWidth: "95%",
         justifyContent: "flex-start",
+    },
+    page: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        width: Dimensions.get('window').width, // Screen width
     },
 });
 

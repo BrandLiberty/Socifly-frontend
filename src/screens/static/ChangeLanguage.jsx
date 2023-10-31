@@ -1,5 +1,5 @@
 import React, { useEffect,useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet,BackHandler, } from 'react-native';
 import { BLACK, WHITE } from '../../styles/colors';
 import { getResponsiveValue } from '../../styles/responsive';
 import stringsoflanguages from '..//../utils/ScreenStrings';
@@ -40,12 +40,11 @@ const ChangeLanguage = ({ navigation }) => {
     navigation.navigate('HomePage', { JSON_Clicked_Item: value });
   };
 
-
-  // const settext = (value) => {
-  //   stringsoflanguages.setLanguage(value);
-  //   console.log(`Language set to ${value}`);
-  //   navigation.navigate('LoginScreen', { JSON_Clicked_Item: value });
-  // };
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', ()=>{navigation.goBack(); return true});
+    return () => backHandler.remove();
+  }, []);
+ 
 
   return (
     <View style={styles.container}>

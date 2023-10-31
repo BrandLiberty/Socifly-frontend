@@ -18,7 +18,7 @@ import Category from '../common/Category';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import Icon from "react-native-vector-icons/FontAwesome";
 import { BLACK, WHITE } from '../styles/colors';
 import { getResponsiveValue } from '../styles/responsive';
 import PostArray from '../common/postArrays/PostArray';
@@ -46,7 +46,9 @@ const HomePage = props => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const navigation = useNavigation();
   const [showModal, setShowModal] = useState(false)
-  
+  const handleNextPage5 = () => {
+    props.navigation.navigate('ChangeLanguage');
+  };
   const [modal, setModal] = useState({
     visible: false,
     message: '',
@@ -61,9 +63,9 @@ const HomePage = props => {
   const [avatar, setAvatar] = useState(profileState.avatar || '')
   const [isLogoutDialogVisible, setIsLogoutDialogVisible] = useState(false);
 
-  function handleLogout(){
-    setIsLogoutDialogVisible(true)
-  }
+  // function handleLogout(){
+  //   setIsLogoutDialogVisible(true)
+  // }
 
   const handleYesForLogout = async () => {
     setIsLogoutDialogVisible(false);
@@ -248,7 +250,15 @@ const HomePage = props => {
       <LinearGradient2 customStyle={styles.loginGradient}>
         <View style={styles.iconStackRow}>
           <View style={styles.iconStack}>   
-           
+          <Pressable
+          style={({ pressed }) => [
+            { opacity: pressed ? 0.6 : 0.9 },
+            styles.iconWrapper,
+            styles.row,
+          ]}
+          onPress={handleNextPage5}>
+          <Icon name="language" style={styles.icon4}></Icon>
+        </Pressable>
           </View> 
           {showModal ? <CustomModal visible={modal.visible} message={modal.message} navigationPage={modal.navigationPage} onClose={modal.onClose} /> : ''}
           <Pressable
@@ -279,13 +289,6 @@ const HomePage = props => {
               name="account-settings"
               style={styles.icon4}
             ></MaterialCommunityIconsIcon>
-          </Pressable>
-
-          <Pressable onPress={handleNextPage2}  style={({ pressed }) => [
-            { opacity: pressed ? 0.8 : 1 },
-            styles.iconWrapper,
-          ]}>
-            <MaterialIconsIcon name="settings" style={styles.icon5} />
           </Pressable>
 
         </View>

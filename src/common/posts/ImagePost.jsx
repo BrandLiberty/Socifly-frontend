@@ -132,9 +132,10 @@ const ImagePost = props => {
           title: 'Share via', // Title of the share dialog
           subject: 'Share Link', // Subject of the share dialog
         };
-
+        setShouldShowAd(true);
         const ShareResponse = await Share.open(shareOptions);
         console.log(JSON.stringify(ShareResponse));
+        
       } catch (error) {
         console.log('Error => ', error);
       }
@@ -263,7 +264,7 @@ const ImagePost = props => {
           </View>
 
         </View>
-        <RewardedAds shouldShowAd={shouldShowAd} onAdShown={handleDownloadAfterAd} />
+       <RewardedAds shouldShowAd={shouldShowAd} onAdShown={handleDownloadAfterAd} />
         {downloaded && (
           <Text style={styles.downloadedText}>{stringsoflanguages.imageDownloaded}</Text>
         )}
@@ -362,7 +363,7 @@ const styles = StyleSheet.create({
     borderWidth: getResponsiveValue(2, 1),
     position: 'absolute',
     bottom: '50%',
-    left: '10%',
+    left: '8%',
   },
   profileImage2: {
     width: getResponsiveValue(270, 120),

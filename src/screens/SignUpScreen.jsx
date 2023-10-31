@@ -125,6 +125,7 @@ const SignUpScreen = props => {
       console.error('Sign up error:', error);
     }
   };
+  
   useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', ()=>{navigation.goBack(); return true});
     return () => backHandler.remove();

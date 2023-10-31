@@ -1,76 +1,81 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import Post1 from '../posts/Post1';
-import Post2 from '../posts/Post2';
-import Post3 from '../posts/Post3';
-import Post4 from '../posts/Post4';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import BirthdayPost from '../posts/BirthdayPost';
-import GoogleAds from '../../common/Ads/GoogleAds';
-// import GoogleAds from '../common/GoogleAds';
-import stringsoflanguages from '../../utils/ScreenStrings';
+import Post2 from '../posts/Post2';
 import { FETCH } from '../../services/fetch';
 import { useProfile, useLocal } from '../../context/ProfileContext';
-
+import GoogleAds from '../Ads/GoogleAds'
 const PostArray = ({ navigation }) => {
-  const { localState, localDispatch } = useLocal()
+  const { localState, localDispatch } = useLocal();
   const { profileState, dispatch } = useProfile();
-
-  const [posts, setPost] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true); // Initially, set loading to true
 
   async function getImages() {
-    let { status, data } = await FETCH(
-      'GET',
-      '/home/get-images',
-      { lang: localState.lang }
-    )
-    if (status === 200) {
-      setPost(data.data)
-      localDispatch({
-        type: "IMAGES",
-        payload: data.data
-      })
-    } else {
-      let a = setModal({
-        visible: true,
-        message: data.message,
-        navigationPage: 'LoginScreen',
-        onClose: () => { setShowModal(false) }
-      })
-
-      setShowModal(true)
+    try {
+      const { status, data } = await FETCH('GET', '/home/get-images', { lang: localState.lang });
+      if (status === 200) {
+        setPosts(data.data);
+        localDispatch({
+          type: 'IMAGES',
+          payload: data.data,
+        });
+      } else {
+        // Handle the error and set the modal accordingly
+        // Assuming setModal is defined and working as expected
+        setModal({
+          visible: true,
+          message: data.message,
+          navigationPage: 'LoginScreen',
+          onClose: () => {
+            setShowModal(false);
+          },
+        });
+        setShowModal(true);
+      }
+    } catch (error) {
+      console.log('Error fetching images:', error);
+    } finally {
+      setLoading(false); // Set loading to false when the fetch is complete
     }
   }
 
   useEffect(() => {
-    let load = async () => {
-      console.log('Post Array Updating Posts')
-      await getImages().then().catch(err => console.log('EFFECT ERROR 2', err))
-      console.log('Post Array Updated Posts')
-    }
-    load()
-  }, [localState.lang])
+    const load = async () => {
+      console.log('Post Array Updating Posts');
+      await getImages();
+      console.log('Post Array Updated Posts');
+      
+    };
+    load();
+  }, [localState.lang]);
 
-  useEffect(()=>{
-    setPost(localState.images)
-  },[localState])
+  useEffect(() => {
+    setPosts(localState.images);
+  }, [localState]);
+
   return (
     <View style={styles.postArrayContainer}>
-      {posts.map((post, i) => {
-        if (i % 4 === 0 && i !== 0) {
-          return (<GoogleAds key={i}/>)
-        }
-        else { 
-          if(post?.category?.type==='Birthday' || post?.category?.type ==='birthday' || post?.category?.type === stringsoflanguages.birthday){
-            return (<BirthdayPost key={post._id} source={profileState.server + post.path} navigation={navigation} id={post._id} />)
-          }else{
-            return (<Post2 key={post._id} source={profileState.server + post.path} navigation={navigation} id={post._id} />)
+      {loading ? ( // Show the loader if loading is true
+        <ActivityIndicator size="large" color="blue" />
+      ) : (
+        posts.map((post, i) => {
+          if (i % 4 === 0 && i !== 0) {
+            return <GoogleAds key={i} />;
+          } else if (post?.category?.type === 'Birthday' || post?.category?.type === 'birthday') {
+            return (
+              <BirthdayPost key={post._id} source={profileState.server + post.path} navigation={navigation} id={post._id} />
+            );
+          } else {
+            return (
+              <Post2 key={post._id} source={profileState.server + post.path} navigation={navigation} id={post._id} />
+            );
           }
-        }
-      })}
+        })
+      )}
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   postArrayContainer: {

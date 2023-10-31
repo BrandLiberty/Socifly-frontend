@@ -141,9 +141,10 @@ const BirthdayPost = props => {
           title: 'Share via', // Title of the share dialog
           subject: 'Share Link', // Subject of the share dialog
         };
-
+        setShouldShowAd(true);
         const ShareResponse = await Share.open(shareOptions);
         console.log(JSON.stringify(ShareResponse));
+        
       } catch (error) {
         console.log('Error => ', error);
       }
@@ -337,7 +338,7 @@ const BirthdayPost = props => {
         {downloaded && (
           <Text style={styles.downloadedText}>{stringsoflanguages.imageDownloaded}</Text>
         )}
-        <RewardedAds shouldShowAd={shouldShowAd} onAdShown={handleDownloadAfterAd} />
+       <RewardedAds shouldShowAd={shouldShowAd} onAdShown={handleDownloadAfterAd} />
         {likedMessageVisible && <Text style={styles.likedText}>{stringsoflanguages.liked}</Text>}
       </SafeAreaView>
     </GestureHandlerRootView>
@@ -408,7 +409,7 @@ const styles = StyleSheet.create({
     borderWidth: getResponsiveValue(4, 2),
     position: 'absolute',
     bottom: '17%',
-    left: '10%',
+    left: '9%',
     transform: [{ rotate: '-10deg' }],
    
   },

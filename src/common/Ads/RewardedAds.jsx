@@ -17,10 +17,6 @@ const RewardedAds = (props) => {
     const [loaded, setLoaded] = useState(false);
     const navigation = useNavigation();
 
-  const pageNotFound = () => {
-    navigation.navigate('NotFound');
-  };
-
   useEffect(() => {
     if (props.shouldShowAd) {
       rewarded.show();
@@ -37,7 +33,6 @@ const RewardedAds = (props) => {
         // console.log('User earned reward of ', reward);
       },
     );
-
     // Start loading the rewarded ad straight away
     rewarded.load();
 
@@ -107,18 +102,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    // adContainer: {
-    //     alignItems: 'center',
-    //     justifyContent: 'center',
-    //     marginBottom: 10,
-    // },
-    // nextadd: {
-    //     width:'80%',
-    //     height: 50,
-    //     borderWidth: 1,
-    //     alignSelf:'center',
         
-    // }
 });
 
 export default RewardedAds;

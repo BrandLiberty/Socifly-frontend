@@ -88,7 +88,7 @@ const ImagePost2 = props => {
   const [likeScale] = useState(new Animated.Value(1));
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
-  const handleLike = () => {
+  const handleLike = () => {   
     Animated.sequence([
       Animated.timing(likeScale, {
         toValue: 1.2,
@@ -121,6 +121,7 @@ const ImagePost2 = props => {
   }, [liked]);
 
   const onShare = async () => {
+    
     if (cardRef.current) {
       try {
         // Capture the cardRef as an image
@@ -136,9 +137,10 @@ const ImagePost2 = props => {
           title: 'Share via', // Title of the share dialog
           subject: 'Share Link', // Subject of the share dialog
         };
-
+        setShouldShowAd(true);
         const ShareResponse = await Share.open(shareOptions);
         console.log(JSON.stringify(ShareResponse));
+       
       } catch (error) {
         console.log('Error => ', error);
       }
@@ -358,7 +360,7 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE,
     position: 'absolute',
     bottom: '10%',
-    left: '10%',
+    left: '8%',
     borderColor: WHITE,
     borderWidth: getResponsiveValue(4, 2),
   },

@@ -45,7 +45,7 @@ const Post2 = props => {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [shouldShowAd, setShouldShowAd] = useState(false);
-
+  const [adClosed, setAdClosed] = useState(false);
   const [likedMessageVisible, setLikedMessageVisible] = useState(false);
 
   const [downloadClicked, setDownloadClicked] = useState(false);
@@ -132,28 +132,42 @@ const Post2 = props => {
   }, []);
 
   const onShare = async () => {
+   
     if (cardRef.current) {
+      
       try {
         // Capture the cardRef as an image
         const uri = await captureRef(cardRef, {
           format: 'png',
           quality: 1,
         });
+       
         // Share options with both message, URL, and image
         const shareOptions = {
+         
           message: '',
           url: uri, // Use the captured image URI
           title: 'Share via', // Title of the share dialog
           subject: 'Share Link', // Subject of the share dialog
         };
+        setShouldShowAd(true);
         const ShareResponse = await Share.open(shareOptions);
         console.log(JSON.stringify(ShareResponse));
+        
       } catch (error) {
         console.log('Error => ', error);
+        
       }
     }
   };
-
+  useEffect(() => {
+    if (adClosed) {
+      // Open share options after the ad is closed
+      // This code will execute when the ad is closed
+      console.log('Ad has been closed');
+      setAdClosed(false); // Reset the adClosed state
+    }
+  }, [adClosed]);
   const handleDoubleTap = async () => {
     // Trigger the like animation
     Animated.sequence([
@@ -399,7 +413,7 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE,
     position: 'absolute',
     bottom: '10%',
-    left: '10%',
+    left: '8%',
     borderColor: WHITE,
     borderWidth: getResponsiveValue(4, 2),
   },
